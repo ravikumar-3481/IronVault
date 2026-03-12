@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>THE IRON VAULT | Unleash the Beast</title>
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Oswald:wght@600;700&display=swap" rel="stylesheet">
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Animation Libs -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        :root {
+            --crimson: #FF3131;
+            --dark: #0a0a0a;
+            --darker: #050505;
+        }
+
+        body {
+            background-color: var(--dark);
+            color: white;
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3, .heading-font {
+            font-family: 'Oswald', sans-serif;
+            text-transform: uppercase;
+            letter-spacing: -0.02em;
+        }
+
+        .text-crimson { color: var(--crimson); }
+        .bg-crimson { background-color: var(--crimson); }
+        .border-crimson { border-color: var(--crimson); }
+
+        /* Custom Shake Animation */
+        @keyframes shake {
+            0% { transform: translate(1px, 1px) rotate(0deg); }
+            10% { transform: translate(-1px, -2px) rotate(-1deg); }
+            20% { transform: translate(-3px, 0px) rotate(1deg); }
+            30% { transform: translate(3px, 2px) rotate(0deg); }
+            40% { transform: translate(1px, -1px) rotate(1deg); }
+            50% { transform: translate(-1px, 2px) rotate(-1deg); }
+            60% { transform: translate(-3px, 1px) rotate(0deg); }
+            70% { transform: translate(3px, 1px) rotate(-1deg); }
+            80% { transform: translate(-1px, -1px) rotate(1deg); }
+            90% { transform: translate(1px, 2px) rotate(0deg); }
+            100% { transform: translate(1px, -2px) rotate(-1deg); }
+        }
+
+        .slam-shake {
+            animation: shake 0.4s cubic-bezier(.36,.07,.19,.97) both;
+            animation-delay: 0.5s;
+        }
+
+        /* Glowing Button */
+        .btn-glow {
+            position: relative;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            overflow: hidden;
+        }
+        .btn-glow:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 25px var(--crimson);
+        }
+
+        /* Glass Cards */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.3s ease;
+        }
+        .glass-card:hover {
+            border-color: var(--crimson);
+            background: rgba(255, 255, 255, 0.06);
+        }
+
+        /* Trainer Cards */
+        .trainer-card .overlay {
+            opacity: 0;
+            transition: all 0.4s ease;
+            transform: translateY(20px);
+        }
+        .trainer-card:hover .overlay {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Progress Bar for Flow Meter */
+        .progress-ring {
+            transition: stroke-dashoffset 0.35s;
+            transform: rotate(-90deg);
+            transform-origin: 50% 50%;
+        }
+
+        /* Hero Image/Video Overlay */
+        .hero-video-overlay {
+            background: linear-gradient(0deg, var(--dark) 0%, rgba(10, 10, 10, 0.2) 50%, rgba(10, 10, 10, 0.7) 100%);
+        }
+
+        /* Grit Texture Overlay */
+        .grit-overlay {
+            background-image: url('https://www.transparenttextures.com/patterns/asfalt-dark.png');
+            opacity: 0.3;
+            pointer-events: none;
+        }
+
+        .equipment-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: var(--crimson);
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: var(--darker); }
+        ::-webkit-scrollbar-thumb { background: var(--crimson); border-radius: 10px; }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation -->
+    <nav class="fixed w-full z-50 px-6 py-4 flex justify-between items-center bg-transparent transition-all duration-300" id="navbar">
+        <div class="heading-font text-3xl font-bold tracking-tighter">
+            IRON<span class="text-crimson">VAULT</span>
+        </div>
+        <div class="hidden md:flex space-x-8 font-bold text-sm tracking-widest uppercase">
+            <a href="#armory" class="hover:text-crimson transition">The Armory</a>
+            <a href="#performance" class="hover:text-crimson transition">Performance</a>
+            <a href="#trainers" class="hover:text-crimson transition">Elites</a>
+            <a href="#flow" class="hover:text-crimson transition">Status</a>
+        </div>
+        <button class="bg-crimson px-6 py-2 heading-font text-sm skew-x-[-10deg] btn-glow">
+            <span class="inline-block skew-x-[10deg]">Join Now</span>
+        </button>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="relative h-screen w-full flex items-center justify-center overflow-hidden bg-black">
+        <!-- Main Background Image (Suitable for the vibe) -->
+        <div class="absolute inset-0 z-0">
+            <img src="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=2070&auto=format&fit=crop" 
+                 class="w-full h-full object-cover opacity-60 grayscale-[0.5]" 
+                 alt="Iron Vault Gym Atmosphere">
+        </div>
+        
+        <!-- Video Layer (Progressive enhancement) -->
+        <video autoplay muted loop playsinline class="absolute w-full h-full object-cover opacity-40 mix-blend-overlay z-0" 
+               poster="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=2070&auto=format&fit=crop">
+            <source src="https://assets.mixkit.co/videos/preview/mixkit-man-training-hard-in-the-gym-23420-large.mp4" type="video/mp4">
+        </video>
+
+        <!-- Overlays -->
+        <div class="absolute inset-0 z-1 hero-video-overlay"></div>
+        <div class="absolute inset-0 z-2 grit-overlay"></div>
+        
+        <div class="relative z-10 text-center px-4 max-w-4xl">
+            <h1 id="hero-headline" class="text-6xl md:text-9xl font-black mb-4 leading-none opacity-0 drop-shadow-[0_5px_15px_rgba(0,0,0,1)]">
+                UNLEASH THE <br> <span class="text-crimson">BEAST</span> WITHIN.
+            </h1>
+            <p id="hero-subline" class="text-xl md:text-2xl mb-8 font-light tracking-wide text-gray-200 opacity-0 bg-black/30 backdrop-blur-sm inline-block px-4 py-1 rounded">
+                Elite equipment. Expert coaching. No excuses.
+            </p>
+            <div id="hero-cta" class="opacity-0">
+                <button class="bg-crimson text-white px-10 py-5 text-2xl heading-font btn-glow skew-x-[-10deg]">
+                    <span class="inline-block skew-x-[10deg] uppercase tracking-tighter">Start Your 3-Day Free Trial</span>
+                </button>
+            </div>
+        </div>
+        
+        <!-- Bottom Hero Images (Decorative floating visuals) -->
+        <div class="absolute bottom-10 left-10 hidden xl:block z-10 opacity-50 hover:opacity-100 transition duration-500">
+             <div class="border-2 border-crimson/50 p-1 transform rotate-[-5deg]">
+                 <img src="https://images.unsplash.com/photo-1517836357463-d25dfeac3438?q=80&w=400&auto=format&fit=crop" class="w-48 h-32 object-cover" alt="Gym Motivation">
+             </div>
+        </div>
+        <div class="absolute bottom-10 right-10 hidden xl:block z-10 opacity-50 hover:opacity-100 transition duration-500">
+            <div class="border-2 border-crimson/50 p-1 transform rotate-[5deg]">
+                <img src="https://images.unsplash.com/photo-1541534741688-6078c64b5903?q=80&w=400&auto=format&fit=crop" class="w-48 h-32 object-cover" alt="Gym Equipment">
+            </div>
+       </div>
+    </section>
+
+    <!-- The Armory -->
+    <section id="armory" class="py-24 px-6 bg-darker">
+        <div class="max-w-7xl mx-auto">
+            <div class="mb-16 text-center">
+                <h2 class="text-5xl md:text-7xl font-bold mb-4">The <span class="text-crimson">Armory</span></h2>
+                <div class="w-24 h-2 bg-crimson mx-auto"></div>
+                <p class="mt-6 text-gray-400 uppercase tracking-widest">Built with heavy metal and high-tensile steel.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div class="glass-card p-10 text-center rounded-lg">
+                    <i class="fa-solid fa-dumbbell equipment-icon"></i>
+                    <h3 class="text-2xl font-bold mb-2">Free Weights</h3>
+                    <p class="text-gray-400 text-sm">Dumbbells up to 150lbs and specialized Olympic bars.</p>
+                </div>
+                <div class="glass-card p-10 text-center rounded-lg">
+                    <i class="fa-solid fa-weight-hanging equipment-icon"></i>
+                    <h3 class="text-2xl font-bold mb-2">Power Racks</h3>
+                    <p class="text-gray-400 text-sm">12 competition-grade racks with spotter arms.</p>
+                </div>
+                <div class="glass-card p-10 text-center rounded-lg">
+                    <i class="fa-solid fa-gear equipment-icon"></i>
+                    <h3 class="text-2xl font-bold mb-2">Hammer Strength</h3>
+                    <p class="text-gray-400 text-sm">Full line of plate-loaded isolation machines.</p>
+                </div>
+                <div class="glass-card p-10 text-center rounded-lg">
+                    <i class="fa-solid fa-bolt equipment-icon"></i>
+                    <h3 class="text-2xl font-bold mb-2">Strongman Zone</h3>
+                    <p class="text-gray-400 text-sm">Atlas stones, logs, and tires for functional grit.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Counter -->
+    <section class="py-20 bg-crimson">
+        <div class="max-w-7xl mx-auto px-6 grid grid-cols-2 md:grid-cols-4 gap-12 text-center">
+            <div>
+                <div class="text-5xl md:text-7xl font-bold heading-font counter" data-target="50">0</div>
+                <div class="uppercase tracking-widest font-bold text-sm">Squat Racks</div>
+            </div>
+            <div>
+                <div class="text-5xl md:text-7xl font-bold heading-font counter" data-target="1500">0</div>
+                <div class="uppercase tracking-widest font-bold text-sm">Active Beasts</div>
+            </div>
+            <div>
+                <div class="text-5xl md:text-7xl font-bold heading-font counter" data-target="12">0</div>
+                <div class="uppercase tracking-widest font-bold text-sm">Elite Coaches</div>
+            </div>
+            <div>
+                <div class="text-5xl md:text-7xl font-bold heading-font counter" data-target="24">0</div>
+                <div class="uppercase tracking-widest font-bold text-sm">Hours Open</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Performance & Recovery -->
+    <section id="performance" class="py-24 px-6 bg-dark">
+        <div class="max-w-7xl mx-auto flex flex-col lg:flex-row items-center gap-16">
+            <div class="lg:w-1/2">
+                <h2 class="text-5xl md:text-6xl font-bold mb-6">TECH-DRIVEN <br><span class="text-crimson">PERFORMANCE</span></h2>
+                <p class="text-gray-400 text-lg mb-8">We don't just lift; we analyze. Every rep is tracked, every recovery session is optimized. The Vault integrates elite wearable tech with world-class recovery facilities.</p>
+                
+                <div class="space-y-6">
+                    <div class="flex items-start gap-4">
+                        <div class="p-3 bg-white/5 border border-crimson/30 rounded"><i class="fa-solid fa-microchip text-crimson"></i></div>
+                        <div>
+                            <h4 class="font-bold uppercase tracking-wide">PR Tracking Integration</h4>
+                            <p class="text-sm text-gray-500">Sync your WHOOP or Apple Watch to our live leaderboards.</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start gap-4">
+                        <div class="p-3 bg-white/5 border border-crimson/30 rounded"><i class="fa-solid fa-snowflake text-crimson"></i></div>
+                        <div>
+                            <h4 class="font-bold uppercase tracking-wide">Cryotherapy Chamber</h4>
+                            <p class="text-sm text-gray-500">Accelerate recovery with sub-zero treatments post-workout.</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start gap-4">
+                        <div class="p-3 bg-white/5 border border-crimson/30 rounded"><i class="fa-solid fa-fire-burner text-crimson"></i></div>
+                        <div>
+                            <h4 class="font-bold uppercase tracking-wide">Infrared Sauna</h4>
+                            <p class="text-sm text-gray-500">Deep tissue heating for detoxification and muscle relaxation.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="lg:w-1/2 relative">
+                <div class="absolute -inset-4 bg-crimson/20 blur-3xl rounded-full"></div>
+                <img src="https://images.unsplash.com/photo-1593079831268-3381b0db4a77?q=80&w=1000&auto=format&fit=crop" alt="Recovery" class="relative z-10 rounded-2xl border border-white/10 grayscale hover:grayscale-0 transition-all duration-700">
+            </div>
+        </div>
+    </section>
+
+    <!-- Trainer Spotlights -->
+    <section id="trainers" class="py-24 px-6 bg-darker overflow-hidden">
+        <div class="max-w-7xl mx-auto">
+            <div class="mb-16">
+                <h2 class="text-5xl font-bold">THE <span class="text-crimson">ELITE</span> SQUAD</h2>
+                <p class="text-gray-400 tracking-[0.3em] uppercase mt-2">Masters of the Craft</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
+                <!-- Trainer 1 -->
+                <div class="trainer-card relative h-[500px] overflow-hidden rounded-xl border border-white/10 group">
+                    <img src="https://images.unsplash.com/photo-1583454110551-21f2fa2afe61?q=80&w=800&auto=format&fit=crop" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition duration-700" alt="Trainer">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent"></div>
+                    <div class="absolute bottom-0 left-0 p-8 w-full">
+                        <h3 class="text-3xl font-bold">MARCUS REED</h3>
+                        <p class="text-crimson font-bold mb-4 tracking-tighter">IFBB PRO / BODYBUILDING</p>
+                        <div class="overlay">
+                            <p class="text-gray-300 text-sm mb-4">15+ Years experience. Specialist in hypertrophy and nutritional periodization. He builds champions.</p>
+                            <button class="w-full py-3 bg-crimson heading-font uppercase text-sm tracking-widest">Book Session</button>
+                        </div>
+                    </div>
+                </div>
+                <!-- Trainer 2 -->
+                <div class="trainer-card relative h-[500px] overflow-hidden rounded-xl border border-white/10 group">
+                    <img src="https://images.unsplash.com/photo-1548690312-e3b507d17a47?q=80&w=800&auto=format&fit=crop" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition duration-700" alt="Trainer">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent"></div>
+                    <div class="absolute bottom-0 left-0 p-8 w-full">
+                        <h3 class="text-3xl font-bold">SARAH VANCE</h3>
+                        <p class="text-crimson font-bold mb-4 tracking-tighter">HIIT & CONDITIONING</p>
+                        <div class="overlay">
+                            <p class="text-gray-300 text-sm mb-4">High-intensity metabolic conditioning expert. Certified in sports psychology and explosive power.</p>
+                            <button class="w-full py-3 bg-crimson heading-font uppercase text-sm tracking-widest">Book Session</button>
+                        </div>
+                    </div>
+                </div>
+                <!-- Trainer 3 -->
+                <div class="trainer-card relative h-[500px] overflow-hidden rounded-xl border border-white/10 group">
+                    <img src="https://images.unsplash.com/photo-1567013127542-490d757e51fc?q=80&w=800&auto=format&fit=crop" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition duration-700" alt="Trainer">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent"></div>
+                    <div class="absolute bottom-0 left-0 p-8 w-full">
+                        <h3 class="text-3xl font-bold">VIKTOR DRAGO</h3>
+                        <p class="text-crimson font-bold mb-4 tracking-tighter">POWERLIFTING COACH</p>
+                        <div class="overlay">
+                            <p class="text-gray-300 text-sm mb-4">Focuses on pure mechanical efficiency. Has coached 50+ athletes to national powerlifting records.</p>
+                            <button class="w-full py-3 bg-crimson heading-font uppercase text-sm tracking-widest">Book Session</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Live Gym Flow -->
+    <section id="flow" class="py-24 px-6 bg-dark">
+        <div class="max-w-4xl mx-auto glass-card p-12 rounded-3xl text-center border-crimson/20">
+            <h2 class="text-4xl font-bold mb-8 uppercase">Live Gym <span class="text-crimson">Status</span></h2>
+            
+            <div class="relative inline-flex items-center justify-center mb-8">
+                <svg class="w-64 h-64">
+                    <circle class="text-white/10" stroke-width="8" stroke="currentColor" fill="transparent" r="100" cx="128" cy="128" />
+                    <circle class="text-crimson progress-ring" stroke-width="12" stroke-dasharray="628" stroke-dashoffset="150" stroke-linecap="round" stroke="currentColor" fill="transparent" r="100" cx="128" cy="128" id="flow-ring" />
+                </svg>
+                <div class="absolute text-center">
+                    <div class="text-6xl font-black heading-font" id="flow-percent">78%</div>
+                    <div class="text-gray-400 uppercase text-xs tracking-[0.3em]">Capacity</div>
+                </div>
+            </div>
+            
+            <p class="text-xl text-gray-300 mb-2">Current Vibe: <span class="text-crimson font-bold uppercase">Prime Time</span></p>
+            <p class="text-sm text-gray-500 italic">"The energy is electric. 12 racks currently available."</p>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-12 border-t border-white/5 bg-darker">
+        <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-8">
+            <div class="heading-font text-2xl font-bold">IRON<span class="text-crimson">VAULT</span></div>
+            <div class="flex space-x-6 text-2xl">
+                <a href="#" class="hover:text-crimson transition"><i class="fa-brands fa-instagram"></i></a>
+                <a href="#" class="hover:text-crimson transition"><i class="fa-brands fa-youtube"></i></a>
+                <a href="#" class="hover:text-crimson transition"><i class="fa-brands fa-tiktok"></i></a>
+            </div>
+            <p class="text-gray-600 text-xs uppercase tracking-widest">© 2024 IRON VAULT GYM. NO EXCUSES.</p>
+        </div>
+    </footer>
+
+    <script>
+        // GSAP Animations
+        gsap.registerPlugin(ScrollTrigger);
+
+        window.onload = () => {
+            // Navbar animation
+            gsap.from("#navbar", { y: -100, opacity: 0, duration: 1, ease: "power4.out" });
+
+            // Hero Slam Animation
+            const heroTimeline = gsap.timeline();
+            heroTimeline.to("#hero-headline", {
+                opacity: 1,
+                scale: 1,
+                duration: 0.5,
+                ease: "bounce.out",
+                startAt: { scale: 3 },
+                onComplete: () => {
+                    document.getElementById('hero-headline').classList.add('slam-shake');
+                }
+            })
+            .to("#hero-subline", { opacity: 1, y: 0, duration: 0.8, startAt: { y: 20 } }, "-=0.2")
+            .to("#hero-cta", { opacity: 1, scale: 1, duration: 0.5, ease: "back.out(1.7)", startAt: { scale: 0.5 } }, "-=0.4");
+
+            // Stats Counter Animation
+            const counters = document.querySelectorAll('.counter');
+            counters.forEach(counter => {
+                const target = +counter.getAttribute('data-target');
+                ScrollTrigger.create({
+                    trigger: counter,
+                    start: "top 85%",
+                    onEnter: () => {
+                        let count = 0;
+                        const updateCount = () => {
+                            const speed = target / 50;
+                            if(count < target) {
+                                count += speed;
+                                counter.innerText = Math.ceil(count) + (target > 100 ? "+" : "");
+                                setTimeout(updateCount, 20);
+                            } else {
+                                counter.innerText = target + "+";
+                            }
+                        };
+                        updateCount();
+                    }
+                });
+            });
+
+            // Live Flow Meter Pulse
+            const flowRing = document.getElementById('flow-ring');
+            const percentDisplay = document.getElementById('flow-percent');
+            setInterval(() => {
+                const newVal = Math.floor(Math.random() * (82 - 75 + 1)) + 75;
+                const offset = 628 - (628 * newVal / 100);
+                flowRing.style.strokeDashoffset = offset;
+                percentDisplay.innerText = newVal + "%";
+            }, 3000);
+
+            // Generic Fade In for sections
+            gsap.utils.toArray('section').forEach(section => {
+                if(section.id === 'hero') return;
+                gsap.from(section, {
+                    opacity: 0,
+                    y: 50,
+                    duration: 1,
+                    scrollTrigger: {
+                        trigger: section,
+                        start: "top 80%",
+                        toggleActions: "play none none none"
+                    }
+                });
+            });
+        };
+
+        // Nav transparency on scroll
+        window.addEventListener('scroll', () => {
+            const nav = document.getElementById('navbar');
+            if(window.scrollY > 50) {
+                nav.classList.add('bg-darker/90', 'backdrop-blur-md', 'py-2');
+                nav.classList.remove('py-4');
+            } else {
+                nav.classList.remove('bg-darker/90', 'backdrop-blur-md', 'py-2');
+                nav.classList.add('py-4');
+            }
+        });
+    </script>
+</body>
+</html>
+
